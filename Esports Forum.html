@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EG Esports - Guild Test Application</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #1a1a1a;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        form, .applications {
+            background: #222;
+            padding: 20px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 500px;
+            margin: auto;
+            box-shadow: 0px 0px 10px rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
+        }
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            background: #333;
+            color: white;
+        }
+        button {
+            background: #ffcc00;
+            padding: 10px;
+            border: none;
+            color: black;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .applications-list {
+            text-align: left;
+        }
+        .application {
+            background: #333;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <h2>EG Esports - Guild Test Application</h2>
+
+    <form id="guildForm">
+        <label>In-Game Name (IGN):</label>
+        <input type="text" id="ign" required>
+
+        <label>Free Fire UID:</label>
+        <input type="text" id="uid" required>
+
+        <label>Discord Username & Tag (e.g., Player#1234):</label>
+        <input type="text" id="discord" required>
+
+        <label>Age:</label>
+        <select id="age">
+            <option>13-15</option>
+            <option>16-18</option>
+            <option>19-21</option>
+            <option>22+</option>
+        </select>
+
+        <label>Preferred Playstyle:</label>
+        <select id="playstyle">
+            <option>Rusher</option>
+            <option>Sniper</option>
+            <option>Support</option>
+            <option>IGL (In-Game Leader)</option>
+        </select>
+
+        <label>Why do you want to join EG Esports?</label>
+        <textarea id="reason" rows="4" required></textarea>
+
+        <button type="submit">Submit Application</button>
+    </form>
+
+    <div class="applications">
+        <h3>Submitted Applications</h3>
+        <div class="applications-list" id="applicationsList"></div>
+    </div>
+
+    <script>
+        document.getElementById("guildForm").addEventListener("submit", function(event) {
+            event.preventDefault();
+
+            const ign = document.getElementById("ign").value;
+            const uid = document.getElementById("uid").value;
+            const discord = document.getElementById("discord").value;
+            const age = document.getElementById("age").value;
+            const playstyle = document.getElementById("playstyle").value;
+            const reason = document.getElementById("reason").value;
+
+            const newApplication = {
+                ign, uid, discord, age, playstyle, reason
+            };
+
+            let applications = JSON.parse(localStorage.getItem("applications")) || [];
+            applications.push(newApplication);
+            localStorage.setItem("applications", JSON.stringify(applications));
+
+            displayApplications();
+            document.getElementById("guildForm").reset();
+        });
+
+        function displayApplications() {
+            let applications = JSON.parse(localStorage.getItem("applications")) || [];
+            let applicationsList = document.getElementById("applicationsList");
+            applicationsList.innerHTML = "";
+
+            applications.forEach((app, index) => {
+                applicationsList.innerHTML += `
+                    <div class="application">
+                        <p><strong>🎮 IGN:</strong> ${app.ign}</p>
+                        <p><strong>🆔 UID:</strong> ${app.uid}</p>
+                        <p><strong>💬 Discord:</strong> ${app.discord}</p>
+                        <p><strong>🎯 Age:</strong> ${app.age}</p>
+                        <p><strong>🔥 Playstyle:</strong> ${app.playstyle}</p>
+                        <p><strong>📝 Reason:</strong> ${app.reason}</p>
+                    </div>
+                `;
+            });
+        }
+
+        window.onload = displayApplications;
+    </script>
+
+</body>
+</html>
